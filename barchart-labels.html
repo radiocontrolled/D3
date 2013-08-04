@@ -70,13 +70,12 @@
 	        	return h - (d.foobar * 9) - 10	;              
 	   		})
 	   		.attr("font-family", "Helvetica")
-		    .attr("font-size", "12px")
+		        .attr("font-size", "12px")
 	   		.attr("fill", "white")
-   		    .attr("text-anchor", "right");
+   		        .attr("text-anchor", "right");
 
 	//draw a horizontal line to visually separate the y-axis labels from the bars. 
 	svg.append("line")
-			
 			.attr("x1",0)
 			.attr("x2",299)
 			.attr("y1",285)
@@ -92,12 +91,12 @@
 			.text(function(d){
 				return d.year;
 			})
-				.attr("x", function(d, i) {
-	       		return i * (w / dataset.length) + 11  ; 
+			.attr("x", function(d, i) {
+	       		return i * (w / dataset.length) + 11; 
 	   		})
 	   		.attr("y", 300)      
 	   		.attr("font-family", "Helvetica")
-		    .attr("font-size", "12px")      
+		   	.attr("font-size", "12px")      
 	   		.attr("fill", "black")
 	
 
