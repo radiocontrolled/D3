@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset='utf-8' />
+	<link rel="shortcut icon" type="image/x-icon" href="http://benj.info/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="http://benj.info/style.css" rel="stylesheet" >
+	<script  src="http://d3js.org/d3.v3.min.js"></script>
+	<!--[if IE 7]>
+ 	 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome-ie7.min.css">
+	<![endif]-->
+	
+	<title>D3 Sandbox</title>
+</head>
+<body>
+	<div class="container" role="main">
+		<div class="header">
+			
+			<h1><a href="http://benj.info">benj.info </a> > D3</h1>
+			
+		</div>
+		
+			<div class="sections">
+				<article>
+			
+				<a href="https://github.com/radiocontrolled/D3">Chart</a> based on <a href="http://chimera.labs.oreilly.com/books/1230000000345/ch11.html#_pie_layout">Interactive Data Visualization for the Web</a> tutorial.<br/>
+			    <br/>
+			
+				
+			
+			<script>
+					var dataset = [ 25,10,40,12.5, 12.5 ];
+					
+					//Width and height
+					var w = 300;
+					var h = 300;
+					
+					
+					// outer radius of the pie is half the width 
+					var outerRadius = w / 2;  
+
+					//draws the wedges
+					var arc = d3.svg.arc()
+					.innerRadius(100) //zero for a pie chart - but if you put a non-zero number in you get a ring chart
+					.outerRadius(outerRadius); 
+
+					// defines default pie layout 
+					var pie = d3.layout.pie();
+
+					//make the SVG , put it before the end of the article element, set its width & height
+					var svg = d3.select("article")	
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+						
+					//Set up groups (g)
+					var arcs = svg.selectAll("g.arc") // not created yet
+						.data(pie(dataset)) //bind data to a group 
+						.enter()
+						.append("g")
+						.attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");  // put the group into place
+					
+					//Draw arc paths
+						arcs.append("path")
+						.attr("fill", function(d,i) {
+							return "rgb(221, 65," + (i * 36) +" )"; //make a fill based on 'Tangerine Tango', Pantone Colour of the year for 2012 #DD4124
+						})
+						.attr("d", arc);
+					
+					//Labels
+					arcs.append("text")
+						.attr("transform", function(d) {
+							return "translate(" + arc.centroid(d) + ")";
+						})
+						.attr("text-anchor", "middle")
+						.attr("font-family", "Helvetica")
+						.attr("font-size", "12px")
+					   	.attr("fill", "white")
+						.text(function(d) {
+							return d.value;
+						});
+
+				
+				</script>
+ 			</article>
+			
+		</div>
+	</div>
+		
+	
+
+</body>
+</html>

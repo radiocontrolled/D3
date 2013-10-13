@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Loading data from a JSON file</title>
+  <meta name="description" content="" />
+  <meta name="author" content="benjamin" />
+
+  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+  
+  <!--- load D3 from the Web --> 
+  <script  src="http://d3js.org/d3.v3.min.js"></script>
+ 
+</head>
+
+<body>
+  <p>This data has been loaded from a JSON document.</p>
+<script>
+	
+	d3.json("data.json", function(json){
+				   // set the size of the SVG
+					var w = 500;
+					var h = 200;
+					
+					var padding = 10;
+					
+					//make the canvas
+					var svg = d3.select("body") 
+				         .append("svg")
+				         .attr("width", w)
+				         .attr("height", h);
+					
+					//draw rectangles
+				    var svg = svg.selectAll("rect")
+						.data(json.foobar)  
+    					.enter()
+    					.append("rect")
+    					.attr("width", (w / json.foobar.length - padding))
+						.attr("height",function(d){
+							return d * 10;
+						})
+						.attr("y", function(d){
+							return h - ( json.foobar.length) * d;
+						})
+						.attr("x", function(d, i) {
+				  			   return i * (w / json.foobar.length);  
+							})
+						.attr("fill", function(d,i){
+							 return "rgb(152, 180, " + (json.foobar.length * d * i) + ")";	
+						})
+	})
+
+</script>
+ 
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Barchart with labels along the y axis</title>
+  <meta name="description" content="" />
+  <meta name="author" content="Alison Benjamin" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+<script>
+  //some dummy data
+	var dataset = [ 
+					{year: 2008, foobar: 8},
+					{year: 2009, foobar: 13},
+					{year: 2010, foobar: 7},
+					{year: 2011, foobar: 25},
+					{year: 2012, foobar: 19},
+					{year: 2013, foobar: 6}
+				  ];
+	
+	// set the size of the SVG
+	var w = 300;
+	var h = 310;
+	var barPadding = 1;
+
+	//make the canvas
+	var svg = d3.select("body") 
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+	
+	//create the bars
+	svg.selectAll("rect") 
+		   .data(dataset)									
+		   .enter()
+		   .append("rect")
+		   .attr("fill", function(d) {
+  			  return "rgb(0, 152, " + (d.foobar * 10) + ")";
+		  	})
+		   .attr("x", function(d, i) {
+  			   return i * (w / dataset.length);  
+		  	})
+		   .attr("y", function(d) {
+			    return h - (d.foobar*9) - 25;  
+		  	})
+		   .attr("width", w / dataset.length - barPadding) // set the width to be proportional to the svg width
+		   .attr("height", function(d){ //set the height to be a function of the data in the dataset
+		      return d.foobar * 9 ;   //scale proportionally
+		    })
+		
+			
+	
+	//labelling each bar  
+	svg.selectAll("text")
+			.data(dataset)
+			.enter()
+			.append("text")
+			.text(function(d){
+				return d.foobar;
+			})
+		
+			.attr("x", function(d, i) {
+	       		return i * (w / dataset.length) + 19 ; 
+	   		})
+	   		.attr("y", function(d) {
+	        	return h - (d.foobar * 9) - 10	;              
+	   		})
+	   		.attr("font-family", "Helvetica")
+		        .attr("font-size", "12px")
+	   		.attr("fill", "white")
+   		        .attr("text-anchor", "right");
+
+	//draw a horizontal line to visually separate the y-axis labels from the bars. 
+	svg.append("line")
+			.attr("x1",0)
+			.attr("x2",299)
+			.attr("y1",285)
+			.attr("y2",285)
+			.style("stroke","#000000")
+		
+	
+	//add text along the y-axis -- code adapted from http://www.recursion.org/d3-for-mere-mortals/
+	svg.selectAll("text.yAxis")
+			.data(dataset)
+			.enter()
+			.append("text")
+			.text(function(d){
+				return d.year;
+			})
+			.attr("x", function(d, i) {
+	       		return i * (w / dataset.length) + 11; 
+	   		})
+	   		.attr("y", 300)      
+	   		.attr("font-family", "Helvetica")
+		   	.attr("font-size", "12px")      
+	   		.attr("fill", "black")
+	
+
+</script>
+ 
+</body>
+</html>

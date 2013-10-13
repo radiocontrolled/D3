@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Force Layout with Labels</title>
+  <meta name="description" content="" />
+  <meta name="author" content="Alison Benjamin" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+   <script src="http://d3js.org/d3.v3.min.js"></script>
+   <link rel="stylesheet" href="style.css">
+   
+</head>
+
+<body>
+<p>
+ Adds labels to nodes in Scott Murray's <a href="http://chimera.labs.oreilly.com/books/1230000000345/ch11.html#_force_layout">Force Layout code</a>. 
+</p>
+<article></article>
+<script>
+		var w = 500; 
+		var h = 500;
+ 
+     	var dataset = {
+				// Nodes are entitites in the dataset.
+		        nodes: [	
+		                { name: "Child 1" },	
+		                { name: "Child 2" },
+		                { name: "Parent 1" },
+		                { name: "Parent 2" }
+		       			],
+		        // Edges are the connections between the nodes.
+		        edges: [ 
+		                { source: 0, target: 2 },
+		                { source: 1, target: 2 },
+		                { source: 0, target: 1 },
+		                { source: 1, target: 3 },
+		                { source: 0, target: 3}
+		        		]
+		};
+		
+		// Draw the canvas
+		var svg = d3.select("article") 
+				 .append("svg")
+				 .attr("width", w)
+				 .attr("height", h);
+		
+		// Initialize a force layout
+		var force = d3.layout.force()
+                  .nodes(dataset.nodes)
+                  .links(dataset.edges)
+                  .size([w, h])
+                  .linkDistance([200]) //distance between the nodes 
+                  .charge([-150])     // repelling between the nodes       
+                  .start();
+
+		// Create an SVG line for each edge
+		var edges = svg.selectAll("line")
+		        .data(dataset.edges)
+		        .enter()
+		        .append("line")
+		        .style("stroke", "#ccc")
+		        .style("stroke-width", 1);
+		        
+		// Create an SVG circle for each node
+		var nodes = svg.selectAll("circle")
+		        .data(dataset.nodes)
+		        .enter()
+		        .append("circle")
+		        .attr("r", 25)
+		        .style("fill", "#019875")
+		        .call(force.drag); //enables user to drag nodes around
+		
+		// Create labels for nodes 
+		var labels = svg.selectAll("text")
+				.data(dataset.nodes)
+				.enter()
+				.append("text")
+				.text(function(d){
+					return d.name;
+				})
+				.style({
+					"fill": "black",
+      				"font-family": "Helvetica",
+      				"font-size": "12px"
+					})
+  
+		force.on("tick", function() {
+			edges.attr("x1", function(d) { return d.source.x; })
+	    	 .attr("y1", function(d) { return d.source.y; })
+	    	 .attr("x2", function(d) { return d.target.x; })
+	    	 .attr("y2", function(d) { return d.target.y; });
+	
+			nodes.attr("cx", function(d) { return d.x; })
+	    	 .attr("cy", function(d) { return d.y; });
+	    	
+	    	// Give each label an x and y coordinate that corresponds to the center point of the node
+	    	labels.attr("x", function(d){ return d.x; })
+	    	 .attr("y", function(d){return d.y});
+
+		});
+
+
+</script>
+</body>
+</html>
